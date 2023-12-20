@@ -1,21 +1,40 @@
 package com.jdevtreinamentos.Controllers;
 
+import com.jdevtreinamentos.model.Usuario;
+import com.jdevtreinamentos.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@Controller
+@RequestMapping(value = "api")
 public class newController {
 
-    @GetMapping
-    @RequestMapping("/{name}")
+    @Autowired
+    UsuarioRepository repository;
+
+    @GetMapping(value = "{name}")
     public ResponseEntity<String> newController(@PathVariable String name) {
-        return ResponseEntity.status(HttpStatus.OK).body("Projeto Criado por: " + name);
+
+        Usuario usuario = new Usuario(name, 10);
+
+        repository.save(usuario);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Projeto Criado por: " + usuario.toString());
+    }
+
+    @GetMapping(value = "listarTodosUsuarios")
+    public ResponseEntity<List<Usuario>> listarTodosUsuarios() {
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+    }
+
+    @PostMapping(value = "salvar")
+    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(usuario));
     }
 
 }
