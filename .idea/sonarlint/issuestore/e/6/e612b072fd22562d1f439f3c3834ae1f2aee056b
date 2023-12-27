@@ -1,0 +1,11 @@
+
+i	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(äµ°‰8ì ëÅÊ1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Êçí¹8í ëÅÊ1
+n
+java:S1223"LRename this method to prevent any misunderstanding or make it a constructor.(Ê×—˜ùÿÿÿÿ8í ëÅÊ1
+m
+java:S36553"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(àØøô8…¡ëÅÊ1
+_
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8†¡ëÅÊ1
+h
+java:S1128"FRemove this unused import 'org.springframework.stereotype.Controller'.(øŠ—Öùÿÿÿÿ8™¡ëÅÊ1

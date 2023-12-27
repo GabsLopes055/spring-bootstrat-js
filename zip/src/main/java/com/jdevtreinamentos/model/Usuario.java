@@ -40,7 +40,6 @@ public class Usuario {
         this.idade = idade;
     }
 
-    public Usuario(){};
 
     public Usuario(String nome, int idade) {
         this.nome = nome;

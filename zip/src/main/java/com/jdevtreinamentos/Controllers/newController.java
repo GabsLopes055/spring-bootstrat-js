@@ -45,4 +45,11 @@ public class newController {
 
     }
 
+    @GetMapping(value = "listarUsuarioId")
+    public ResponseEntity<Usuario> buscarUsuarioId(@RequestParam Long id) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findById(id).get());
+
+    }
+
 }
