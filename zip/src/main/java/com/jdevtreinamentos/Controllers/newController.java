@@ -52,4 +52,10 @@ public class newController {
 
     }
 
+    @PutMapping(value = "atualizar")
+    public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(repository.saveAndFlush(usuario));
+    }
+
 }
