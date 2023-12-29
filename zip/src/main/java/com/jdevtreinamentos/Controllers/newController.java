@@ -2,29 +2,22 @@ package com.jdevtreinamentos.Controllers;
 
 import com.jdevtreinamentos.model.Usuario;
 import com.jdevtreinamentos.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api")
 public class newController {
 
-    @Autowired
-    UsuarioRepository repository;
 
-    @GetMapping(value = "{name}")
-    public ResponseEntity<String> newController(@PathVariable String name) {
+    private UsuarioRepository repository;
 
-        Usuario usuario = new Usuario(name, 10);
-
-        repository.save(usuario);
-
-        return ResponseEntity.status(HttpStatus.OK).body("Projeto Criado por: " + usuario.toString());
+    newController(UsuarioRepository usuarioRepository) {
+        this.repository = usuarioRepository;
     }
 
     @GetMapping(value = "listarTodosUsuarios")
@@ -39,6 +32,7 @@ public class newController {
 
     @DeleteMapping(value = "deletar")
     public ResponseEntity<String> deletar(@RequestParam Long idUser) {
+
         repository.deleteById(idUser);
 
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso");
@@ -48,14 +42,27 @@ public class newController {
     @GetMapping(value = "listarUsuarioId")
     public ResponseEntity<Usuario> buscarUsuarioId(@RequestParam Long id) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findById(id).get());
+        Optional<Usuario> user = repository.findById(id);
+
+        return user.map(usuario -> ResponseEntity.status(HttpStatus.OK).body(usuario)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
     }
 
     @PutMapping(value = "atualizar")
-    public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario) {
 
+        if (usuario.getId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID não informado !");
+        } else {
         return ResponseEntity.status(HttpStatus.OK).body(repository.saveAndFlush(usuario));
+        }
+
+    }
+
+    @GetMapping(value = "buscarPorNome")
+    public ResponseEntity<List<Usuario>> buscarPorNome(@RequestParam String nome) {
+        System.out.println(nome.trim());
+        return ResponseEntity.status(HttpStatus.OK).body(repository.buscarPorNome(nome.trim().toUpperCase()));
     }
 
 }

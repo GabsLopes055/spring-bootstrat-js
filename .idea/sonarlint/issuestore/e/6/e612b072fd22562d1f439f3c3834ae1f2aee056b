@@ -1,11 +1,6 @@
 
-i	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(äµ°‰8«ï‰ÆÊ1
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Êçí¹8­ï‰ÆÊ1
-n
-java:S1223"LRename this method to prevent any misunderstanding or make it a constructor.(Ê×—˜ùÿÿÿÿ8­ï‰ÆÊ1
-m
-java:S36553"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(àØøô8¿ï‰ÆÊ1
-_
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Àï‰ÆÊ1
-h
-java:S1128"FRemove this unused import 'org.springframework.stereotype.Controller'.(øŠ—Öùÿÿÿÿ8Îï‰ÆÊ1
+i	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(äµ°‰8å‘À¼Ë1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Êçí¹8å‘À¼Ë1
+H
+java:S14524"&Remove usage of generic wildcard type.(Ø‰§‹ÿÿÿÿÿ8õ‘À¼Ë1
+G	java:S106@"+Replace this use of System.out by a logger.(ð†ç‰8Ú‹é¼Ë1
