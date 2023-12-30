@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+
+    <title>Cadastro de usuários em spring</title>
+
+    <style>
+
+        body{
+            background-color: #D7D8D7
+        }
+
+        .card-footer {
+            padding: 10px;
+        }
+        button{
+            width: 100%;
+        }
+
+        .material-icons.orange {
+            color: #FB8C00;
+         }
+
+        .material-icons.danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="card mt-2 mb-5">
+
+        <div class="card-header">
+            <h1>Cadastro de Usuários</h1>
+        </div>
+        <div class="card-body">
+            <form method="post" id="formCadastroUser">
+
+                <div class="alert alert-danger" role="alert" hidden id="alerta">
+                    Preencha os campos corretamente !
+                </div>
+
+                <div class="alert alert-success" role="alert" hidden id="salvo">
+                    Usuário Salvo com Sucesso !
+                </div>
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label"><strong>Nome Completo</strong></label>
+                    <input type="text" class="form-control" id="nome" required="true">
+                </div>
+                <div class="mb-3">
+                    <label for="idade" class="form-label"><strong>Idade</strong></label>
+                    <input type="number" class="form-control" id="idade" required="true">
+                </div>
+                <button type="button" class="btn btn-outline-info" onclick="salvarUsuario()" id="cadastrar">Cadastrar
+                </button>
+            </form>
+        </div>
+
+        <div class="card-footer">
+            <div class="row mb-3">
+                <div class="col-12 col-md-10"><label for="pesquisar" class="form-label"><strong>Pesquisar
+                    Usuário</strong></label>
+                    <input type="text" class="form-control" id="pesquisar" required="true"
+                           placeholder="Informe um nome para ser pesquisado"></div>
+                <div class="col-12 col-md-2 d-flex align-items-end mt-2">
+                    <button class="btn btn-dark">Pesquisar</button>
+                </div>
+            </div>
+            <table class="table table-borderless table-hover table-responsive align-middle" id="tabelaUsuarios">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Idade</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">Apagar</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    window.onload = function () {
+
+        $.ajax({
+              method: "GET",
+              url: "api/listarTodosUsuarios",
+              success: function(response) {
+                $('#tabelaUsuarios > tbody > tr').remove();
+
+                for(var i = 0; i <= response.length; i++) {
+
+                    $('#tabelaUsuarios > tbody').append('<tr><td>'+ response[i].id +'</td><td>'+ response[i].nome +'</td><td>'+ response[i].idade +'</td><td><a onclick="editarUsuario()" type="button"> <span class="material-icons orange">edit</span></a></td><td><a onclick="excluirUsuario()" type="button"> <span class="material-icons danger">clear</span></a></td></tr>');
+
+                }
+
+              }
+            }).fail(function(message) {
+                document.getElementById('alerta').removeAttribute("hidden");
+                document.getElementById('alerta').innerHTML = "Erro ao listar todos os usuários";
+            })
+
+    }
+
+    function salvarUsuario(){
+
+        var id = $('#id').val();
+        var nome = $('#nome').val();
+        var idade = $('#idade').val();
+
+        if(nome == '' || idade == '') {
+            document.getElementById('alerta').removeAttribute("hidden");
+        } else {
+            $.ajax({
+              method: "POST",
+              url: "api/salvar",
+              data: JSON.stringify({ id: id, nome: nome, idade: idade }),
+              contentType: "application/json; charset=utf-8",
+              success: function(response) {
+                document.getElementById('alerta').setAttribute("hidden", "hidden");
+                document.getElementById('salvo').removeAttribute("hidden");
+                formCadastroUser.reset();
+              }
+            }).fail(function(message) {
+                document.getElementById('alerta').removeAttribute("hidden");
+                document.getElementById('alerta').innerHTML = "Erro ao salvar usuário";
+            })
+        }
+    }
+
+    function editarUsuario() {
+        alert('Editar');
+    }
+
+    function excluirUsuario(){
+        alert('Excluir');
+    }
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
