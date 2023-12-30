@@ -13,4 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query(value = "SELECT * FROM USUARIO WHERE upper(trim(NOME)) LIKE %:nome%", nativeQuery = true)
     List<Usuario> buscarPorNome(String nome);
 
+    List<Usuario> findAllByOrderByIdDesc();
+
 }

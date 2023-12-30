@@ -22,7 +22,7 @@ public class newController {
 
     @GetMapping(value = "listarTodosUsuarios")
     public ResponseEntity<List<Usuario>> listarTodosUsuarios() {
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findAllByOrderByIdDesc());
     }
 
     @PostMapping(value = "salvar")
