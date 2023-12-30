@@ -7,3 +7,5 @@ g
 7zip/src/main/java/com/jdevtreinamentos/Application.java,1\9\19d1430b0a8195bea42ecb146b41527acaa5314d
 x
 Hzip/src/main/java/com/jdevtreinamentos/repository/UsuarioRepository.java,b\e\be55a1a5fa50bbfb470e5d2f33f7fc5e86fdca7d
+;
+zip/pom.xml,a\3\a3e820ce4677c5f4c70c45503a97ec073a1e9826

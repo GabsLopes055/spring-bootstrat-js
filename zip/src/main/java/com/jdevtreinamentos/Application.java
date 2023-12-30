@@ -18,15 +18,4 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    CommandLineRunner initialUser() {
-        return args -> {
-            Usuario user = new Usuario();
-            user.setNome("Gabriel Lopes Teixeira");
-            user.setIdade(25);
-            repository.save(user);
-        };
-    }
-
-
 }
