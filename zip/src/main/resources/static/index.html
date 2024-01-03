@@ -51,8 +51,14 @@
                     Preencha os campos corretamente !
                 </div>
 
-                <div class="alert alert-success" role="alert" hidden id="salvo">
-                    Usuário Salvo com Sucesso !
+                <div class="alert alert-success alert-dismissible fade show" role="alert" hidden id="salvo">
+                    Usuário <strong>Salvo</strong> com Sucesso !
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" hidden id="editado">
+                    Usuário <strong>Editado</strong> com Sucesso !
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
                 <div class="mb-3">
@@ -95,7 +101,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="editarUsuario" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editarUsuarioModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,9 +111,7 @@
             <div class="modal-body">
                 <form method="post">
 
-                    <div class="alert alert-danger" role="alert" hidden id="alertaEditar">
-                        Erro ao carregar informações do usuário !
-                    </div>
+                    <div class="alert alert-danger" role="alert" hidden id="alertaEditar"></div>
 
                     <div class="mb-3">
                         <label for="idUsuario" class="form-label"><strong>Id</strong></label>
@@ -125,7 +129,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning">Salvar</button>
+                <button type="button" class="btn btn-warning" onclick="editarUsuario()">Salvar</button>
             </div>
         </div>
     </div>
@@ -135,6 +139,11 @@
 
     window.onload = function () {
 
+        carregaTabela();
+
+    }
+
+    function carregaTabela() {
         $.ajax({
               method: "GET",
               url: "api/listarTodosUsuarios",
@@ -143,7 +152,7 @@
 
                 for(var i = 0; i <= response.length; i++) {
 
-                    $('#tabelaUsuarios > tbody').append('<tr><td>'+ response[i].id +'</td><td>'+ response[i].nome +'</td><td>'+ response[i].idade +'</td><td><a type="button" onclick="buscarUsuarioPorId(' + response[i].id + ')" data-bs-toggle="modal" data-bs-target="#editarUsuario"> <span class="material-icons orange">edit</span></a></td><td><a onclick="excluirUsuario()" type="button"> <span class="material-icons danger">clear</span></a></td></tr>');
+                    $('#tabelaUsuarios > tbody').append('<tr><td>'+ response[i].id +'</td><td>'+ response[i].nome +'</td><td>'+ response[i].idade +'</td><td><a type="button" onclick="buscarUsuarioPorId(' + response[i].id + ')" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal"> <span class="material-icons orange">edit</span></a></td><td><a onclick="excluirUsuario()" type="button"> <span class="material-icons danger">clear</span></a></td></tr>');
 
                 }
 
@@ -152,7 +161,6 @@
                 document.getElementById('alerta').removeAttribute("hidden");
                 document.getElementById('alerta').innerHTML = "Erro ao listar todos os usuários";
             })
-
     }
 
     function salvarUsuario(){
@@ -184,7 +192,6 @@
 
 
     function buscarUsuarioPorId(id) {
-    console.log(id)
         $.ajax({
               method: "GET",
               url: "api/listarUsuarioId",
@@ -196,6 +203,32 @@
               }
             }).fail(function(message) {
                 document.getElementById('alertaEditar').removeAttribute("hidden");
+                document.getElementById('alertaEditar').innerHTML = "Erro ao carregas informações do usuário ";
+            })
+    }
+
+    function editarUsuario() {
+
+        var id = $('#idUsuario').val();
+        var nome = $('#nomeEditar').val();
+        var idade = $('#idadeEditar').val();
+
+        $.ajax({
+              method: "PUT",
+              url: "api/atualizar",
+              data: JSON.stringify({ id: id, nome: nome, idade: idade }),
+              contentType: "application/json",
+              success: function(response) {
+<!--                $('#editarUsuarioModal').modal('toggle');-->
+                $('#editarUsuarioModal').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                carregaTabela();
+                document.getElementById('editado').removeAttribute("hidden");
+              }
+            }).fail(function(message) {
+                document.getElementById('alertaEditar').removeAttribute("hidden");
+                document.getElementById('alertaEditar').innerHTML = "Erro ao editar usuario !";
             })
     }
 
