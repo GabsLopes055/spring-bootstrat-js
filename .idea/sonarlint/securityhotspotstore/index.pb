@@ -11,3 +11,7 @@ Hzip/src/main/java/com/jdevtreinamentos/repository/UsuarioRepository.java,b\e\b
 zip/pom.xml,a\3\a3e820ce4677c5f4c70c45503a97ec073a1e9826
 q
 Asrc/main/java/com/jdevtreinamentos/Controllers/newController.java,3\6\369a67c2168137e536e5761175a9942002585900
+T
+$src/main/resources/static/index.html,5\0\50cdafbf7d475900dd881fa999628076a8edd192
+t
+Dsrc/main/java/com/jdevtreinamentos/repository/UsuarioRepository.java,2\2\223cd306fcad9e372628ce12f0b4ec2f7e6648cb

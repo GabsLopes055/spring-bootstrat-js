@@ -61,7 +61,6 @@ public class newController {
 
     @GetMapping(value = "buscarPorNome")
     public ResponseEntity<List<Usuario>> buscarPorNome(@RequestParam String nome) {
-        System.out.println(nome.trim());
         return ResponseEntity.status(HttpStatus.OK).body(repository.buscarPorNome(nome.trim().toUpperCase()));
     }
 
