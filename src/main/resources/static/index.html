@@ -51,17 +51,23 @@
                     Preencha os campos corretamente !
                 </div>
 
-                <div class="alert alert-success" role="alert" hidden id="salvo">
-                    Usuário Salvo com Sucesso !
+                <div class="alert alert-success alert-dismissible fade show" role="alert" hidden id="salvo">
+                    Usuário <strong>Salvo</strong> com Sucesso !
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" hidden id="editado">
+                    Usuário <strong>Editado</strong> com Sucesso !
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
                 <div class="mb-3">
                     <label for="nome" class="form-label"><strong>Nome Completo</strong></label>
-                    <input type="text" class="form-control" id="nome" required="true">
+                    <input type="text" class="form-control" id="nome" required="true" placeholder="Informe um nome para ser cadastrado">
                 </div>
                 <div class="mb-3">
                     <label for="idade" class="form-label"><strong>Idade</strong></label>
-                    <input type="number" class="form-control" id="idade" required="true">
+                    <input type="number" class="form-control" id="idade" required="true" placeholder="Informe um idade">
                 </div>
                 <button type="button" class="btn btn-outline-info" onclick="salvarUsuario()" id="cadastrar">Cadastrar
                 </button>
@@ -95,19 +101,58 @@
     </div>
 </div>
 
+<div class="modal fade" id="editarUsuarioModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Usuário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+
+                    <div class="alert alert-danger" role="alert" hidden id="alertaEditar"></div>
+
+                    <div class="mb-3">
+                        <label for="idUsuario" class="form-label"><strong>Id</strong></label>
+                        <input type="number" class="form-control" readonly="readonly" id="idUsuario">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nomeEditar" class="form-label"><strong>Nome Completo</strong></label>
+                        <input type="text" class="form-control" id="nomeEditar" required="true" placeholder="Informe um nome para ser cadastrado">
+                    </div>
+                    <div class="mb-3">
+                        <label for="idadeEditar" class="form-label"><strong>Idade</strong></label>
+                        <input type="number" class="form-control" id="idadeEditar" required="true" placeholder="Informe um idade">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="editarUsuario()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     window.onload = function () {
 
+        carregaTabela();
+
+    }
+
+    function carregaTabela() {
         $.ajax({
               method: "GET",
               url: "api/listarTodosUsuarios",
               success: function(response) {
                 $('#tabelaUsuarios > tbody > tr').remove();
 
-                for(var i = 0; i <= response.length; i++) {
+                for(var i = 0; i < response.length; i++) {
 
-                    $('#tabelaUsuarios > tbody').append('<tr><td>'+ response[i].id +'</td><td>'+ response[i].nome +'</td><td>'+ response[i].idade +'</td><td><a onclick="editarUsuario()" type="button"> <span class="material-icons orange">edit</span></a></td><td><a onclick="excluirUsuario()" type="button"> <span class="material-icons danger">clear</span></a></td></tr>');
+                    $('#tabelaUsuarios > tbody').append('<tr><td>'+ response[i].id +'</td><td>'+ response[i].nome +'</td><td>'+ response[i].idade +'</td><td><a type="button" onclick="buscarUsuarioPorId(' + response[i].id + ')" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal"> <span class="material-icons orange">edit</span></a></td><td><a onclick="excluirUsuario()" type="button"> <span class="material-icons danger">clear</span></a></td></tr>');
 
                 }
 
@@ -116,7 +161,6 @@
                 document.getElementById('alerta').removeAttribute("hidden");
                 document.getElementById('alerta').innerHTML = "Erro ao listar todos os usuários";
             })
-
     }
 
     function salvarUsuario(){
@@ -145,8 +189,47 @@
         }
     }
 
+
+
+    function buscarUsuarioPorId(id) {
+        $.ajax({
+              method: "GET",
+              url: "api/listarUsuarioId",
+              data: { id: id },
+              success: function(response) {
+                $('#idUsuario').val(response.id);
+                $('#nomeEditar').val(response.nome);
+                $('#idadeEditar').val(response.idade);
+              }
+            }).fail(function(message) {
+                document.getElementById('alertaEditar').removeAttribute("hidden");
+                document.getElementById('alertaEditar').innerHTML = "Erro ao carregas informações do usuário ";
+            })
+    }
+
     function editarUsuario() {
-        alert('Editar');
+
+        var id = $('#idUsuario').val();
+        var nome = $('#nomeEditar').val();
+        var idade = $('#idadeEditar').val();
+
+        $.ajax({
+              method: "PUT",
+              url: "api/atualizar",
+              data: JSON.stringify({ id: id, nome: nome, idade: idade }),
+              contentType: "application/json",
+              success: function(response) {
+<!--                $('#editarUsuarioModal').modal('toggle');-->
+                $('#editarUsuarioModal').modal('hide');
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                carregaTabela();
+                document.getElementById('editado').removeAttribute("hidden");
+              }
+            }).fail(function(message) {
+                document.getElementById('alertaEditar').removeAttribute("hidden");
+                document.getElementById('alertaEditar').innerHTML = "Erro ao editar usuario !";
+            })
     }
 
     function excluirUsuario(){

@@ -9,3 +9,5 @@ x
 Hzip/src/main/java/com/jdevtreinamentos/repository/UsuarioRepository.java,b\e\be55a1a5fa50bbfb470e5d2f33f7fc5e86fdca7d
 ;
 zip/pom.xml,a\3\a3e820ce4677c5f4c70c45503a97ec073a1e9826
+q
+Asrc/main/java/com/jdevtreinamentos/Controllers/newController.java,3\6\369a67c2168137e536e5761175a9942002585900
